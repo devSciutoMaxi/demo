@@ -1,6 +1,6 @@
 import express, { Application } from "express";
 import router from '../routes/company.routes';
-
+import cors from 'cors';
 
 class Server {
     private app: Application
@@ -12,11 +12,18 @@ class Server {
     constructor() {
         this.app = express();
         this.port = '3000';
+        this.middlewares();
         this.routes();
     }
 
-    routes(){
-        this.app.use( this.apiPaths.companies, router )
+    middlewares() {
+        this.app.use(cors());
+        this.app.use(express.json())
+    }
+
+
+    routes() {
+        this.app.use(this.apiPaths.companies, router)
     }
 
     listen() {
