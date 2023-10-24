@@ -1,18 +1,20 @@
 import { Request, Response } from "express";
+import Company from "../models/company";
 
-export const getAll = (_req: Request, res: Response) => {
-    res.json({
-        msj: 'listamos todas las companias'
-    })
+export const getAll = async (_req: Request, res: Response) => {
+
+    const companies = await Company.findAll();
+
+    res.json({ companies })
 }
 
 export const getCompany = (req: Request, res: Response) => {
 
-    const { name } = req.params
+    const { id } = req.params
 
     res.json({
         msj: 'Listar una compañía con sus empleados',
-        name
+        id
     })
 }
 

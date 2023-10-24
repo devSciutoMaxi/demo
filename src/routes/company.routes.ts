@@ -4,7 +4,7 @@ import { getAll, getCompany, postCompany } from "../controllers/company.controll
 const router = Router();
 
 router.get('/', getAll);
-router.get('/:name', getCompany);
+router.get('/:id', getCompany);
 router.post('/', postCompany);
 
 
