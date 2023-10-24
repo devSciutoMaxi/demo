@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Company from "../models/company";
+import Employe from "../models/employe";
 
 export const getAll = async (_req: Request, res: Response) => {
 
@@ -8,14 +9,13 @@ export const getAll = async (_req: Request, res: Response) => {
     res.json({ companies })
 }
 
-export const getCompany = (req: Request, res: Response) => {
+export const getCompanyEmployees =async  (req: Request, res: Response) => {
 
     const { id } = req.params
 
-    res.json({
-        msj: 'Listar una compañía con sus empleados',
-        id
-    })
+    const employees = await Employe.findAll({where: { companyId: id}})
+
+    res.json({ employees })
 }
 
 export const postCompany = (req: Request, res: Response) => {
