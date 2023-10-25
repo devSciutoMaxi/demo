@@ -9,21 +9,44 @@ export const getAll = async (_req: Request, res: Response) => {
     res.json({ companies })
 }
 
-export const getCompanyEmployees =async  (req: Request, res: Response) => {
-
+export const getCompanyEmployees = async (req: Request, res: Response) => {
     const { id } = req.params
 
-    const employees = await Employe.findAll({where: { companyId: id}})
+    const employees = await Employe.findAll({ where: { companyId: id } })
 
-    res.json({ employees })
+    if (employees.length) {
+        res.json({ employees })
+    } else {
+        res.status(404).json({
+            msg: 'No existe la compañia con el id ' + id
+        })
+    }
 }
 
-export const postCompany = (req: Request, res: Response) => {
+export const postCompany = async (req: Request, res: Response) => {
+    const { body } = req;
 
-    const { body } = req
+    try {
 
-    res.json({
-        msj: 'Poder agregar una nueva compañía',
-        body
-    })
+        const existeCompany = await Company.findOne({ where: { name: body.name } });
+
+        if (existeCompany) {
+            res.status(400).json({
+                msg: 'Ya existe esa compañia ' + body.name
+            });
+        } else {
+
+            const company = Company.build(body)
+            await company.save()
+            res.json(company)
+        }
+
+    } catch (error) {
+
+        console.error(error);
+        res.status(500).json({
+            msg: 'Error al grabar una nueva compañia'
+        })
+    }
+
 }
